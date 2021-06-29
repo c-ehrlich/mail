@@ -73,6 +73,10 @@ function add_email(email) {
   if (email.read === true) {
     email_li.classList.add('list-group-item-dark');
   }
+  // truncate title length if necessary
+  email.subject = truncate_subject(email.subject);
+
+  // Create email div
   email_li.innerHTML = `
     <div class="row">
       <div class="col-3 mail-item-sender">${email.sender}</div>
@@ -81,4 +85,29 @@ function add_email(email) {
     </div>
   `;
   document.querySelector('#emails-view-list').append(email_li);
+}
+
+// +-------------------------------------------------------------+
+// |                                                             | 
+// |                      HELPER FUNCTIONS                       |
+// |                                                             | 
+// +-------------------------------------------------------------+
+
+// truncate email title length
+// truncates total length to 160 chars
+// deletes any individual words over 50 chars
+function truncate_subject(subject) {
+  var words = subject.split(" ");
+  var output = "";
+  // strip words that are longer than 50 characters
+  words.forEach(word => {
+    if (word.length < 50) {
+      output += word + " ";
+    }
+  });
+  // truncate output to max 160 characters
+  if (output.length > 160) {
+    output = output.substring(0, 160) + " ...";
+  }
+  return output;
 }
