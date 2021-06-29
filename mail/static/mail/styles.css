@@ -1,3 +1,19 @@
 textarea {
     min-height: 400px;
 }
+
+/* TODO try to find a way to use no custom CSS */
+.list-group-item:hover {
+    background-color: whitesmoke;
+}
+
+.mail-item-sender {
+    font-weight: bold;
+    overflow-wrap: break-word;
+}
+.mail-item-subject {
+    overflow-wrap: break-word;
+}
+.mail-item-timestamp {
+    color: grey;
+}

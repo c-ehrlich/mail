@@ -27,22 +27,20 @@ function compose_email() {
 }
 
 function load_mailbox(mailbox) {
-  
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
   document.querySelector('#compose-view').style.display = 'none';
 
   // Show the mailbox name
-  document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+  document.querySelector('#emails-view-title').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+  document.querySelector('#emails-view-list').innerHTML = '';
 
+  // Display emails
   fetch(`/emails/${mailbox}`)
   .then(response => response.json())
   .then(emails => {
-    // Print emails
-    console.log(emails);
-
-    // Do something else with emails
-  })
+    emails.forEach(email => add_email(email));
+  });
 }
 
 function send_mail() {
@@ -62,4 +60,25 @@ function send_mail() {
     // ALL RECIPIENTS NEED TO BE REGISTERED ON HERE
     console.log(result);
   });
+}
+
+// Display an email
+function add_email(email) {
+  console.log(email);
+  const email_li = document.createElement('li');
+  // email_li.className = 'list-group-item';
+  email_li.classList.add('list-group-item');
+  email_li.classList.add('container');
+  // if email.read is true, also give it list-group-item-dark
+  if (email.read === true) {
+    email_li.classList.add('list-group-item-dark');
+  }
+  email_li.innerHTML = `
+    <div class="row">
+      <div class="col-3 mail-item-sender">${email.sender}</div>
+      <div class="col mail-item-subject">${email.subject}</div>
+      <div class="col-2 mail-item-timestamp">${email.timestamp}</div>
+    </div>
+  `;
+  document.querySelector('#emails-view-list').append(email_li);
 }
