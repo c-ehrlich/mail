@@ -3,8 +3,9 @@ textarea {
 }
 
 /* TODO try to find a way to use no custom CSS */
-.list-group-item:hover {
+.email:hover {
     background-color: whitesmoke;
+    cursor: pointer;
 }
 
 .mail-item-sender {

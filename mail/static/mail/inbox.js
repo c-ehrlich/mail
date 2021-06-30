@@ -135,8 +135,7 @@ function view_email(email_id) {
 function add_email(email) {
   const email_li = document.createElement('li');
   // email_li.className = 'list-group-item';
-  email_li.classList.add('list-group-item');
-  email_li.classList.add('container');
+  email_li.classList.add('container', 'list-group-item', 'email');
   // if email.read is true, also give it list-group-item-dark
   if (email.read === true) {
     email_li.classList.add('list-group-item-secondary');
