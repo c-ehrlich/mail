@@ -14,11 +14,10 @@ document.addEventListener('DOMContentLoaded', function() {
   load_mailbox('inbox');
 });
 
+
 // Compose an email
 // arg: email we are replying to (provide null to get a blank email)
 function compose_email(email = null) {
-  console.log("compose email");
-  console.log(email);
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#read-view').style.display = 'none';
@@ -38,6 +37,10 @@ function compose_email(email = null) {
   }
 }
 
+
+// Loads a mailbox
+// Input: mailbox name
+// Valid mailbox names: 'inbox', 'sent', 'archives'
 function load_mailbox(mailbox) {
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
@@ -56,6 +59,8 @@ function load_mailbox(mailbox) {
   });
 }
 
+
+// Sends an email
 function send_mail() {
   // Insert substitute strings if subject or body are empty
   subject = document.querySelector('#compose-subject').value;
@@ -72,17 +77,12 @@ function send_mail() {
       body: body
     })
   })
-  .then(response => response.json())
-  .then(result => {
-    // Print result
-    // success: 201, failure: 400
-    // TODO maybe do something with this data?
-    console.log(result);
-  });
+  .then(response => response.json());
 }
 
 
 // View an email
+// Input: id of an email (int)
 function view_email(email_id) {
   // Show the email and hide other views
   document.querySelector('#emails-view').style.display = 'none';
@@ -97,7 +97,6 @@ function view_email(email_id) {
   fetch(`/emails/${email_id}`)
   .then(response => response.json())
   .then(email => {
-    // console.log(email);
     document.querySelector('#read-view-subject').innerHTML = truncate_subject(email.subject);
     document.querySelector('#read-view-sender').innerHTML = "From: " + email.sender;
     document.querySelector('#read-view-recipients').innerHTML = "To: " + email.recipients;
@@ -130,7 +129,6 @@ function view_email(email_id) {
         });
       }
     }
-
   });
 
   // mark the email as read
@@ -140,7 +138,6 @@ function view_email(email_id) {
       read: true
     })
   });
-
 }
 
 
@@ -169,6 +166,7 @@ function add_email(email) {
   document.querySelector('#emails-view-list').append(email_li);
 }
 
+
 // +-------------------------------------------------------------+
 // |                                                             | 
 // |                      HELPER FUNCTIONS                       |
@@ -196,6 +194,7 @@ function truncate_subject(subject) {
   return output;
 }
 
+
 // archive an email
 // input: mail_id
 function archive(mail_id) {
@@ -208,6 +207,9 @@ function archive(mail_id) {
   .then(() => load_mailbox('inbox'));
 }
 
+
+// create the body of an email reply
+// input: the email being replied to (JSON)
 function make_reply_body(email) {
   return `\n`
        + `----------\n`
@@ -215,6 +217,9 @@ function make_reply_body(email) {
        + `${email.body}`;
 }
 
+
+// create the subject of an email reply
+// input: the email being replied to (JSON)
 function make_reply_subject(email) {
   subject = email.subject;
   if (!subject.startsWith("Re: ")) {
@@ -223,8 +228,9 @@ function make_reply_subject(email) {
   return subject;
 }
 
+
 // mark an email as unread
-// input: mail_id
+// input: mail_id (int)
 function mark_unread(mail_id) {
   fetch(`/emails/${mail_id}`, {
     method: 'PUT',
@@ -235,8 +241,9 @@ function mark_unread(mail_id) {
   .then(() => load_mailbox('inbox'));
 }
 
+
 // unarchive an email
-// input: mail_id
+// input: mail_id (int)
 function unarchive(mail_id) {
   fetch(`/emails/${mail_id}`, {
     method: 'PUT',
