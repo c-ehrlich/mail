@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block body %}
-    <h2>{{ request.user.email }}</h2>
+    <h2 id="user_email">{{ request.user.email }}</h2>
 
     <button class="btn btn-sm btn-outline-primary" id="inbox">Inbox</button>
     <button class="btn btn-sm btn-outline-primary" id="compose">Compose</button>
@@ -40,6 +40,11 @@
             <div id="read-view-timestamp"></div>
         </div>
         <div id="read-view-recipients"></div>
+        <div id="read-view-buttons">
+            <button style="display: none" id="read-view-mark-unread-button" type="button" class="btn btn-sm btn-outline-primary">Mark Unread</button>
+            <button style="display: none" id="read-view-archive-button" type="button" class="btn btn-sm btn-outline-primary">Archive</button>
+            <button style="display: none" id="read-view-unarchive-button" type="button" class="btn btn-sm btn-outline-primary">Unarchive</button>
+        </div>
         <hr>
         <div id="read-view-body"></div>
     </div>
