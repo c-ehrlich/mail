@@ -46,12 +46,18 @@ function load_mailbox(mailbox) {
 }
 
 function send_mail() {
+  // Insert substitute strings if subject or body are empty
+  subject = document.querySelector('#compose-subject').value;
+  if (subject === "") { subject = "(no subject)"; }
+  body = document.querySelector('#compose-body').value;
+  if (body === "") { body = "(no body text)"; }
+
   fetch('/emails', {
     method: 'POST',
     body: JSON.stringify({
       recipients: document.querySelector('#compose-recipients').value,
-      subject: document.querySelector('#compose-subject').value,
-      body: document.querySelector('#compose-body').value
+      subject: subject,
+      body: body
     })
   })
   .then(response => response.json())
