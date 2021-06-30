@@ -131,6 +131,8 @@ function truncate_subject(subject) {
       output += word + " ";
     }
   });
+  // remove whitespace from both sides of the string
+  output = output.trim();
   // truncate output to max 160 characters
   if (output.length > 160) {
     output = output.substring(0, 160) + " ...";
