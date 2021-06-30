@@ -46,7 +46,6 @@ function load_mailbox(mailbox) {
 }
 
 function send_mail() {
-  console.log("trying to send mail");
   fetch('/emails', {
     method: 'POST',
     body: JSON.stringify({
@@ -72,30 +71,37 @@ function view_email(email_id) {
   document.querySelector('#read-view').style.display =  'block';
   document.querySelector('#compose-view').style.dispaly = 'none';
 
-  console.log(`clicked email ${email_id}`);
+  // display the email
   fetch(`/emails/${email_id}`)
   .then(response => response.json())
   .then(email => {
-    console.log(email);
     document.querySelector('#read-view-subject').innerHTML = truncate_subject(email.subject);
     document.querySelector('#read-view-sender').innerHTML = "From: " + email.sender;
     document.querySelector('#read-view-recipients').innerHTML = "To: " + email.recipients;
     document.querySelector('#read-view-timestamp').innerHTML = email.timestamp;
     document.querySelector('#read-view-body').innerHTML = email.body;
   });
+
+  // mark the email as read
+  fetch(`/emails/${email_id}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+      read: true
+    })
+  })
+  .then(response => console.log(response))
 }
 
 
 // Display an email in a list
 function add_email(email) {
-  console.log(email);
   const email_li = document.createElement('li');
   // email_li.className = 'list-group-item';
   email_li.classList.add('list-group-item');
   email_li.classList.add('container');
   // if email.read is true, also give it list-group-item-dark
   if (email.read === true) {
-    email_li.classList.add('list-group-item-dark');
+    email_li.classList.add('list-group-item-secondary');
   }
   // truncate title length if necessary
   email.subject = truncate_subject(email.subject);
