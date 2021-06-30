@@ -17,6 +17,7 @@ function compose_email() {
 
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#read-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
 
   // Clear out composition fields
@@ -29,6 +30,7 @@ function compose_email() {
 function load_mailbox(mailbox) {
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
+  document.querySelector('#read-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'none';
 
   // Show the mailbox name
@@ -57,12 +59,28 @@ function send_mail() {
   .then(result => {
     // Print result
     // success: 201, failure: 400
-    // ALL RECIPIENTS NEED TO BE REGISTERED ON HERE
+    // TODO maybe do something with this data?
     console.log(result);
   });
 }
 
-// Display an email
+
+// View an email
+function view_email(email_id) {
+  // Show the email and hide other views
+  document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#read-view').style.display =  'block';
+  document.querySelector('#compose-view').style.dispaly = 'none';
+  console.log(`clicked email ${email_id}`);
+  fetch(`/emails/${email_id}`)
+  .then(response => response.json())
+  .then(email => {
+    console.log(email);
+  })
+}
+
+
+// Display an email in a list
 function add_email(email) {
   console.log(email);
   const email_li = document.createElement('li');
@@ -82,8 +100,10 @@ function add_email(email) {
       <div class="col-3 mail-item-sender">${email.sender}</div>
       <div class="col mail-item-subject">${email.subject}</div>
       <div class="col-2 mail-item-timestamp">${email.timestamp}</div>
-    </div>
-  `;
+    </div>`;
+
+  // Add eventListener to the email div
+  email_li.addEventListener('click', () => view_email(email.id));
   document.querySelector('#emails-view-list').append(email_li);
 }
 
