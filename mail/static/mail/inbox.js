@@ -49,6 +49,7 @@ function send_mail() {
   // Insert substitute strings if subject or body are empty
   subject = document.querySelector('#compose-subject').value;
   if (subject === "") { subject = "(no subject)"; }
+  subject = truncate_subject(subject);
   body = document.querySelector('#compose-body').value;
   if (body === "") { body = "(no body text)"; }
 
@@ -99,21 +100,18 @@ function view_email(email_id) {
       mark_unread_button.style.display = 'inline-block';
       mark_unread_button.addEventListener('click', () => {
         mark_unread(email_id);
-        load_mailbox('inbox');
       })
       if (email.archived === true) {
         unarchive_button = document.querySelector('#read-view-unarchive-button');
         unarchive_button.style.display = 'inline-block';
         unarchive_button.addEventListener('click', () => {
           unarchive(email_id);
-          load_mailbox('inbox');
         });
       } else {
         archive_button = document.querySelector('#read-view-archive-button');
         archive_button.style.display = 'inline-block';
         archive_button.addEventListener('click', () => {
           archive(email_id);
-          load_mailbox('inbox');
         });
       }
     }
@@ -192,6 +190,7 @@ function archive(mail_id) {
       archived: true
     })
   })
+  .then(() => load_mailbox('inbox'));
 }
 
 // mark an email as unread
@@ -203,6 +202,7 @@ function mark_unread(mail_id) {
       read: false
     })
   })
+  .then(() => load_mailbox('inbox'));
 }
 
 // unarchive an email
@@ -214,4 +214,5 @@ function unarchive(mail_id) {
       archived: false
     })
   })
+  .then(() => load_mailbox('inbox'));
 }
