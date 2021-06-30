@@ -4,7 +4,8 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#inbox').addEventListener('click', () => load_mailbox('inbox'));
   document.querySelector('#sent').addEventListener('click', () => load_mailbox('sent'));
   document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
-  document.querySelector('#compose').addEventListener('click', compose_email);
+  document.querySelector('#compose').addEventListener('click', () => compose_email(null));
+  // document.querySelector('#compose').addEventListener('click', compose_email);
 
   // Add event Listener to send email
   document.querySelector('#compose-form').onsubmit = send_mail;
@@ -13,18 +14,28 @@ document.addEventListener('DOMContentLoaded', function() {
   load_mailbox('inbox');
 });
 
-function compose_email() {
-
+// Compose an email
+// arg: email we are replying to (provide null to get a blank email)
+function compose_email(email = null) {
+  console.log("compose email");
+  console.log(email);
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#read-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
 
-  // Clear out composition fields
-  document.querySelector('#compose-recipients').value = '';
-  document.querySelector('#compose-subject').value = '';
-  document.querySelector('#compose-body').value = '';
-
+  // We are not replaying to an email
+  if (email === null) {
+    // Clear out composition fields
+    document.querySelector('#compose-recipients').value = '';
+    document.querySelector('#compose-subject').value = '';
+    document.querySelector('#compose-body').value = '';
+  } else {
+    // Set the composition fields to the right things
+    document.querySelector('#compose-recipients').value = email.sender;
+    document.querySelector('#compose-subject').value = make_reply_subject(email);
+    document.querySelector('#compose-body').value = make_reply_body(email);
+  }
 }
 
 function load_mailbox(mailbox) {
@@ -86,12 +97,16 @@ function view_email(email_id) {
   fetch(`/emails/${email_id}`)
   .then(response => response.json())
   .then(email => {
-    console.log(email);
+    // console.log(email);
     document.querySelector('#read-view-subject').innerHTML = truncate_subject(email.subject);
     document.querySelector('#read-view-sender').innerHTML = "From: " + email.sender;
     document.querySelector('#read-view-recipients').innerHTML = "To: " + email.recipients;
     document.querySelector('#read-view-timestamp').innerHTML = email.timestamp;
     document.querySelector('#read-view-body').innerHTML = email.body;
+
+    document.querySelector('#read-view-reply-button').addEventListener('click', () => {
+      compose_email(email);
+    });
 
     // show "mark unread" and "archive"/"unarchive" buttons
     let user = document.querySelector('#user_email').innerHTML;
@@ -191,6 +206,21 @@ function archive(mail_id) {
     })
   })
   .then(() => load_mailbox('inbox'));
+}
+
+function make_reply_body(email) {
+  return `\n`
+       + `----------\n`
+       + `On ${email.timestamp}, ${email.sender} wrote:\n`
+       + `${email.body}`;
+}
+
+function make_reply_subject(email) {
+  subject = email.subject;
+  if (!subject.startsWith("Re: ")) {
+    subject = "Re: " + subject;
+  }
+  return subject;
 }
 
 // mark an email as unread
