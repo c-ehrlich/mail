@@ -71,12 +71,18 @@ function view_email(email_id) {
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#read-view').style.display =  'block';
   document.querySelector('#compose-view').style.dispaly = 'none';
+
   console.log(`clicked email ${email_id}`);
   fetch(`/emails/${email_id}`)
   .then(response => response.json())
   .then(email => {
     console.log(email);
-  })
+    document.querySelector('#read-view-subject').innerHTML = truncate_subject(email.subject);
+    document.querySelector('#read-view-sender').innerHTML = email.sender;
+    document.querySelector('#read-view-recipients').innerHTML = email.recipients;
+    document.querySelector('#read-view-timestamp').innerHTML = email.timestamp;
+    document.querySelector('#read-view-body').innerHTML = email.body;
+  });
 }
 
 
