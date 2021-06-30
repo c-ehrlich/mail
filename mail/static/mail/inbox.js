@@ -78,8 +78,8 @@ function view_email(email_id) {
   .then(email => {
     console.log(email);
     document.querySelector('#read-view-subject').innerHTML = truncate_subject(email.subject);
-    document.querySelector('#read-view-sender').innerHTML = email.sender;
-    document.querySelector('#read-view-recipients').innerHTML = email.recipients;
+    document.querySelector('#read-view-sender').innerHTML = "From: " + email.sender;
+    document.querySelector('#read-view-recipients').innerHTML = "To: " + email.recipients;
     document.querySelector('#read-view-timestamp').innerHTML = email.timestamp;
     document.querySelector('#read-view-body').innerHTML = email.body;
   });

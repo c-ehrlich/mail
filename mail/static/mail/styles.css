@@ -17,3 +17,23 @@ textarea {
 .mail-item-timestamp {
     color: grey;
 }
+
+#read-view-header-upper {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+#read-view-sender {
+    font-weight: bold;
+}
+#read-view-recipients {
+    font-size: 0.875em;
+    color: grey;
+}
+#read-view-timestamp {
+    color: grey;
+}
+#read-view-body {
+    white-space: pre-wrap;
+}
