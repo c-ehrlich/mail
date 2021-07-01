@@ -4,7 +4,7 @@ textarea {
 
 /* TODO try to find a way to use no custom CSS */
 .email:hover {
-    background-color: whitesmoke;
+    background-color: lightblue;
     cursor: pointer;
 }
 
